@@ -13,7 +13,25 @@
     <input type="number" name="age">
     <input type="submit">
 </form>
-
-<script src="/static/js/bootstrap.min.js"></script>
+<div>
+    <div class="container">
+        <table class="table">
+            <thead>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Age</th>
+            </thead>
+            <tbody>
+            {% for student in students %}
+                <tr>
+                    <td>{{ student.id }}</td>
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.age }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script src="/static/js/bootstrap.min.js"></script>
 </body>
 </html>

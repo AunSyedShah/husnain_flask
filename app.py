@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -21,9 +21,23 @@ def home():
         student = Student(name=stud_name, age=stud_age)
         db.session.add(student)
         db.session.commit()
-        return "<h1>Student added successfully</h1>"
+        return redirect('/')
     if request.method == 'GET':
-        return render_template('index.html')
+        students = Student.query.all()
+        context = {
+            'students': students
+        }
+        return render_template('index.html', **context)
+
+
+# delete all students
+@app.route('/delete')
+def delete():
+    students = Student.query.all()
+    for student in students:
+        db.session.delete(student)
+        db.session.commit()
+    return redirect('/')
 
 
 if __name__ == '__main__':
