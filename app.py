@@ -12,6 +12,9 @@ class Student(db.Model):
     name = db.Column(db.String(100))
     age = db.Column(db.Integer)
 
+with app.app_context():
+    db.create_all()
+
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
