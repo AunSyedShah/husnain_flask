@@ -16,12 +16,21 @@ class Student(db.Model):
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if request.method == 'POST':
-        stud_name = request.form.get('name')
-        stud_age = request.form.get('age')
-        student = Student(name=stud_name, age=stud_age)
-        db.session.add(student)
-        db.session.commit()
-        return redirect('/')
+        if "search" in request.form:
+            stud_name = request.form.get('name')
+            # search database for student name
+            students = Student.query.filter_by(name=stud_name).all()
+            context = {
+                'students': students
+            }
+            return render_template('index.html', **context)
+        if "submit" in request.form:
+            stud_name = request.form.get('name')
+            stud_age = request.form.get('age')
+            student = Student(name=stud_name, age=stud_age)
+            db.session.add(student)
+            db.session.commit()
+            return redirect('/')
     if request.method == 'GET':
         students = Student.query.all()
         context = {
