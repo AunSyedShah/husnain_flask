@@ -12,6 +12,7 @@ class Student(db.Model):
     name = db.Column(db.String(100))
     age = db.Column(db.Integer)
 
+
 with app.app_context():
     db.create_all()
 
@@ -20,9 +21,9 @@ with app.app_context():
 def home():
     if request.method == 'POST':
         if "search" in request.form:
-            stud_name = request.form.get('name')
+            stud_id = request.form.get('id')
             # search database for student name
-            students = Student.query.filter_by(name=stud_name).all()
+            students = Student.query.filter_by(id=stud_id).all()
             context = {
                 'students': students
             }
@@ -32,6 +33,15 @@ def home():
             stud_age = request.form.get('age')
             student = Student(name=stud_name, age=stud_age)
             db.session.add(student)
+            db.session.commit()
+            return redirect('/')
+        if "update" in request.form:
+            stud_id = request.form.get('id')
+            stud_name = request.form.get('name')
+            stud_age = request.form.get('age')
+            student = Student.query.filter_by(id=stud_id).first()
+            student.name = stud_name
+            student.age = stud_age
             db.session.commit()
             return redirect('/')
     if request.method == 'GET':
@@ -50,6 +60,15 @@ def delete():
         db.session.delete(student)
         db.session.commit()
     return redirect('/')
+
+
+# api
+@app.route('/api', methods=['POST'])
+def api():
+    print(request.json)
+    return {
+        'message': 'Success',
+    }
 
 
 if __name__ == '__main__':
