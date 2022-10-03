@@ -40,8 +40,18 @@ def home():
             stud_name = request.form.get('name')
             stud_age = request.form.get('age')
             student = Student.query.filter_by(id=stud_id).first()
+            if student is None:
+                return render_template('index.html')
             student.name = stud_name
             student.age = stud_age
+            db.session.commit()
+            return redirect('/')
+        if "delete" in request.form:
+            stud_id = request.form.get('id')
+            student = Student.query.filter_by(id=stud_id).first()
+            if student is None:
+                return render_template('index.html')
+            db.session.delete(student)
             db.session.commit()
             return redirect('/')
     if request.method == 'GET':
