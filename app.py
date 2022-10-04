@@ -73,11 +73,20 @@ def delete():
 
 
 # api
-@app.route('/api', methods=['POST'])
-def api():
-    print(request.json)
+@app.route('/api/students', methods=['GET'])
+def api_students():
+    students = Student.query.all()
+    student_list = []
+    for student in students:
+        student_list.append(
+            {
+                'id': student.id,
+                'name': student.name,
+                'age': student.age
+            }
+        )
     return {
-        'message': 'Success',
+        'students': student_list
     }
 
 
